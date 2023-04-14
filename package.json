@@ -1,9 +1,12 @@
 {
   "name": "ip-address-tracker",
   "private": true,
+  "homepage": "/ip-address-tracker/",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
@@ -14,6 +17,7 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.1.0",
     "autoprefixer": "^10.4.14",
+    "gh-pages": "^5.0.0",
     "postcss": "^8.4.21",
     "tailwindcss": "^3.3.1",
     "vite": "^4.2.0"
