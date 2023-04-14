@@ -13,6 +13,11 @@ const latitude = ref(null)
 const longitude = ref(null)
 const isp = ref(null)
 let mapDiv;
+const markerLayerGroup = L.layerGroup();
+const customMarkerIcon = L.icon({
+    iconUrl: '/icon-location.svg',
+    iconAnchor: [23, 56],
+})
 
 async function getClientIP() {
     const response = await fetch('https://api.ipify.org?format=json')
@@ -48,21 +53,25 @@ async function callAPIs() {
 callAPIs()
 
 onMounted(() => {
-    mapDiv = L.map('mapContainer').setView([24.7136, 46.6753], 13)
+    mapDiv = L.map('mapContainer', {zoomControl: false, minZoom: 0, maxZoom: 15, maxBoundsViscosity: 1.0}).setView([24.7136, 46.6753], 13)
     const accessToken = 'pk.eyJ1IjoieWF6ZWVkLWlkcmlzIiwiYSI6ImNsZ2c3dHR2aDA5MWQzcm8wZnRodWJmYTgifQ.Svuo1STYnrpWpTZKombMdg'
     L.tileLayer(
         'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=' + accessToken, {
             tileSize: 512,
             zoomOffset: -1,
+            minZoom: 0,
+            maxZoom: 15,
             attribution: '© <a href="https://www.mapbox.com/contribute/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(mapDiv);
+    markerLayerGroup.addTo(mapDiv);
 
 })
 
 watch(location, () => {
     if (location.value) {
+        markerLayerGroup.clearLayers();
         mapDiv.setView([latitude.value, longitude.value], 13)
-        L.marker([latitude.value, longitude.value]).addTo(mapDiv);
+        L.marker([latitude.value, longitude.value], {icon: customMarkerIcon}).addTo(markerLayerGroup);
     }
 })
 
