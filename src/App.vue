@@ -34,10 +34,8 @@ async function getIPData() {
   if (searchQuery.value.type === 'ip') {
     getURL = 'https://geo.ipify.org/api/v2/country,city,vpn?apiKey=' + apiKey + '&ipAddress=' + searchQuery.value.address
   }
-  console.log('getURL is:', getURL)
   const response = await fetch(getURL)
       .then(response => response.json());
-  console.log('response is:', response)
   location.value = response.location.city + ', ' + response.location.country;
   timezone.value = 'UTC ' + response.location.timezone;
   isp.value = response.isp;
@@ -82,7 +80,6 @@ watch(location, () => {
 })
 
 function onIPChanged($event) {
-  console.log('ip is:', $event.type, $event.address)
   searchQuery.value = $event
   getIPData()
 }
